@@ -1,3 +1,5 @@
+# crypto-market-analyzer>
+
 import requests
 import pandas as pd
 
@@ -60,17 +62,22 @@ def analyze_market_pattern(df):
 
 
 def main():
+    res = get_analyze_results()
+    print(res)
+
+def get_analyze_results():
     interval = '1w'  # Example interval (1 day)
     limit = 1500  # Number of candles to retrieve
 
     cryptoPairs = ['BTCUSDT', 'ETHUSDT', 'TWTUSDT']
 
-
+    res = ""
     for symbol in cryptoPairs:
         df = get_candles(symbol, interval, limit)
         pattern = analyze_market_pattern(df)
+        res += f'\nThe market pattern for {symbol} is: {pattern}'
 
-        print(f'The market pattern for {symbol} is: {pattern}')
+    return res
 
 
 if __name__ == '__main__':
