@@ -10,6 +10,7 @@ def get_candles(symbol, interval='1d', limit=100):
     :param interval: Time interval for candlesticks, e.g., '1d' (1 day), '1h' (1 hour)
     :param limit: Number of candlesticks to retrieve
     :return: DataFrame with candlestick data
+    https://developers.binance.com/docs/derivatives/coin-margined-futures/market-data/Kline-Candlestick-Data
     """
     url = f'https://api.binance.com/api/v3/klines'
     params = {
@@ -48,19 +49,19 @@ def analyze_market_pattern(df):
     df = df.dropna()
 
     # Calculate the average percentage change
-    avg_pct_change = df['pct_change'].mean()
+    avg_pct_change = round(df['pct_change'].mean(), 2)
 
     if avg_pct_change > 0:
-        return 'Bull'
+        return f'Bull: {avg_pct_change}'
     elif avg_pct_change < 0:
-        return 'Bear'
+        return f'Bear: {avg_pct_change}'
     else:
         return 'Neutral'
 
 
 def main():
-    interval = '1d'  # Example interval (1 day)
-    limit = 100  # Number of candles to retrieve
+    interval = '1w'  # Example interval (1 day)
+    limit = 1500  # Number of candles to retrieve
 
     cryptoPairs = ['BTCUSDT', 'ETHUSDT', 'TWTUSDT']
 
