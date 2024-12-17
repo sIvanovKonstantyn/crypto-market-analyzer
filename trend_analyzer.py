@@ -37,45 +37,26 @@ def get_candles(symbol, interval='1d', limit=100):
     return df
 
 
-def analyze_market_pattern(df):
-    """
-    Analyze market pattern based on candlestick data.
+def analyze_avg_price(df):
+    # Calculate median in closing prices
+    return df['close'].mean()
 
-    :param df: DataFrame with candlestick data
-    :return: 'Bull' if the market is bullish, 'Bear' if the market is bearish
-    """
-    # Calculate percentage change in closing prices
-    df['pct_change'] = df['close'].pct_change()
-
-    # Drop NA values created by pct_change
-    df = df.dropna()
-
-    # Calculate the average percentage change
-    avg_pct_change = round(df['pct_change'].mean(), 2)
-
-    if avg_pct_change > 0:
-        return f'Bull: {avg_pct_change}'
-    elif avg_pct_change < 0:
-        return f'Bear: {avg_pct_change}'
-    else:
-        return 'Neutral'
 
 
 def main():
-    res = get_analyze_results()
+    res = get_analyze_results('1M')
     print(res)
 
-def get_analyze_results():
-    interval = '1w'  # Example interval (1 day)
+def get_analyze_results(interval):
     limit = 1500  # Number of candles to retrieve
 
-    cryptoPairs = ['BTCUSDT', 'ETHUSDT', 'TWTUSDT']
+    cryptoPairs = ['BTCUSDT', 'ETHUSDT', 'TWTUSDT', 'SOLUSDT', 'BNBUSDT', 'XRPUSDT']
 
     res = ""
     for symbol in cryptoPairs:
         df = get_candles(symbol, interval, limit)
-        pattern = analyze_market_pattern(df)
-        res += f'\nThe market pattern for {symbol} is: {pattern}'
+        price = analyze_avg_price(df)
+        res += f'\nThe avg price for {symbol} is: {price}'
 
     return res
 
